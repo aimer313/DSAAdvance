@@ -1,0 +1,54 @@
+//Backtracing
+// Channa Sir
+class Solution5 {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> allSolutions;//all subsets
+        vector<int> partialSolution;//The subset that is being built
+        bt(nums , partialSolution , allSolutions);
+        return allSolutions;
+
+    }
+private:
+    void bt(vector<int>& nums , vector<int>&  partialSolution, vector<vector<int>>& allSolutions) {
+        if(nums.empty()) {
+            allSolutions.push_back(partialSolution);
+            return ;
+        }
+        int lastEle = nums.back(); nums.pop_back();
+        bt(nums , partialSolution , allSolutions);//without last ele
+
+        partialSolution.push_back(lastEle);
+        bt(nums , partialSolution , allSolutions);
+        partialSolution.pop_back();//undo
+        nums.push_back(lastEle);
+
+    }
+};
+
+
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> allSolutions;//all subsets
+        vector<int> partialSolution;//The subset that is being built
+        bt(nums , nums.size() , partialSolution , allSolutions);
+        return allSolutions;
+
+    }
+private:
+    void bt(vector<int>& nums ,int n, vector<int>&  partialSolution, vector<vector<int>>& allSolutions) {
+        if(n==0) {
+            allSolutions.push_back(partialSolution);
+            return ;
+        }
+        int lastEle = nums[n-1];
+        bt(nums ,n-1, partialSolution , allSolutions);//without last ele
+
+        partialSolution.push_back(lastEle);
+        bt(nums , n-1 , partialSolution , allSolutions);
+        partialSolution.pop_back();//undo
+        // nums.push_back(lastEle);
+
+    }
+};
