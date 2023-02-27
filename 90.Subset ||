@@ -1,0 +1,63 @@
+class Solution11 {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        // vector<vector<int>> allSolutionsAns;
+      set<vector<int>> allSolutionsSet;//all subsets
+        vector<int> partialSolution;//The subset that is being built
+        bt(nums , nums.size() , partialSolution , allSolutionsSet);
+        vector<vector<int>> allSolutionAns(allSolutionsSet.begin() , allSolutionsSet.end());
+        return allSolutionAns;
+
+    }
+private:
+    // const -> not change value of nums ... exceptional in this case...........
+    void bt(const vector<int>& nums ,int n, vector<int>&  partialSolution, set<vector<int>>& allSolutionsSet) {
+        if(n==0) {
+                auto  copy = partialSolution;
+                sort(copy.begin() , copy.end());
+            allSolutionsSet.insert(copy);
+            return ;
+        }
+        int lastEle = nums[n-1];
+        bt(nums ,n-1, partialSolution , allSolutionsSet);//without last ele
+
+        partialSolution.push_back(lastEle);
+        bt(nums , n-1 , partialSolution , allSolutionsSet);
+        partialSolution.pop_back();//undo
+        // nums.push_back(lastEle);
+
+    }
+};
+
+
+
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+       sort(nums.begin() , nums.end());
+      vector<vector<int>> allSolutionAns;//all subsets
+        vector<int> partialSolution;//The subset that is being built
+        bt(nums , nums.size() , partialSolution , allSolutionAns);
+        // vector<vector<int>> allSolutionAns(allSolutionsSet.begin() , allSolutionsSet.end());
+        return allSolutionAns;
+
+    }
+private:
+    // const -> not change value of nums ... exceptional in this case...........
+    void bt(const vector<int>& nums ,int n, vector<int>&  partialSolution, vector<vector<int>>& allSolutionAns) {
+        if(n==0) {
+            allSolutionAns.push_back(partialSolution);
+            return ;
+        }
+        int lastEle = nums[n-1];
+        int k = 1;
+        while(n-k-1 >= 0 && nums[n-k-1] == nums[n-k]) k++;// for duplicates
+        bt(nums ,n-k, partialSolution , allSolutionAns);//without last ele
+
+        partialSolution.push_back(lastEle);
+        bt(nums , n-1 , partialSolution , allSolutionAns);//since checking all possibility
+        partialSolution.pop_back();//undo
+        // nums.push_back(lastEle);
+
+    }
+};
