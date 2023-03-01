@@ -1,0 +1,35 @@
+// Channa Sir
+class Solution {
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>> all;
+        vector<int> par;
+        search(1 , k , n , par , all);
+        return all;
+    }
+private:
+    void search(int num , int size , int t ,vector<int>& par,vector<vector<int>>& all ) {
+        if(size == 0 && t == 0) {
+            all.push_back(par);
+            return ;
+        }
+        
+        if(size == 0) {
+            assert(t > 0);
+            return ;
+        }
+        if(num == 10) {
+            return ; // one infeasible solution
+        }
+        // without num
+        search(num+1 , size , t , par , all);
+        
+        // with num
+        if(t - num >= 0) {
+            par.push_back(num);
+            search(num+1 , size-1 , t-num , par , all);
+            par.pop_back();
+            
+        }
+    }
+};
