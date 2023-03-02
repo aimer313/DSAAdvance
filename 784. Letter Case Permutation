@@ -1,0 +1,35 @@
+// Channa Sir
+class Solution {
+public:
+    vector<string> letterCasePermutation(string s) {
+        vector<string> all;
+        string par;
+        search(s, 0 , par , all);
+        return all;
+    }
+private:
+    void search(const string&s , int idx , string& par , vector<string>& all) {
+        if(idx == s.size()) {
+            all.push_back(par);
+        }
+        
+        else {
+            if(isdigit(s[idx])) {
+                par.push_back(s[idx]);
+                search(s,idx+1,par,all);
+                par.pop_back();
+            }
+            
+            else{
+                // for lower
+                par.push_back(tolower(s[idx]));
+                search(s,idx+1,par,all);
+                par.pop_back();
+                // for upper
+                par.push_back(toupper(s[idx]));
+                search(s,idx+1,par,all);
+                par.pop_back();
+            }
+        }
+    }
+};
