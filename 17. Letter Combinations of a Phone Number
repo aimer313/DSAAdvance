@@ -1,0 +1,31 @@
+// Channa Sir
+class Solution {
+    // mapping -> char (digit) , string -> {2 -> abc};
+    vector<string> mapping = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+public:
+    vector<string> letterCombinations(string digits) {
+        //
+        // if(digits.empty()) return {};
+        vector<string> all;
+        string par;
+        search(digits, 0 , par , all);
+        return all;
+    }
+private:
+    void search(const string&digits , int idx , string& par , vector<string>& all) {
+        if(idx == digits.size()) {
+            all.push_back(par);
+        }
+        
+        else {
+            //for each
+            string possibilities = mapping[digits[idx] - '0'];
+            for(char c : possibilities) {
+                par.push_back(c);
+                search(digits , idx+1 , par , all);
+                //then undo
+                par.pop_back();
+            }
+        }
+    }
+};
