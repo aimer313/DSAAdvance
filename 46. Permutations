@@ -1,0 +1,32 @@
+// Chnna Sir
+class Solution {
+    vector<vector<int>> allPer;
+public:
+     vector<vector<int>> permute(vector<int>& nums) {
+        // bitmask technique to be used...
+         allPer.clear();//to clear all prev data
+         vector<int> partialPer;
+         vector<bool> bitmask(nums.size() , true);
+         backtrack(bitmask , nums , partialPer);
+         return allPer;
+        
+    }
+private:
+        void backtrack(vector<bool> &bitmask , const vector<int>&nums ,vector<int> &partialPer) {
+            if(partialPer.size() == nums.size()) {
+                //assert (bitmask has no true values)
+                allPer.push_back(partialPer);
+            } else {
+                for(int i = 0 ; i < bitmask.size() ; i++) {
+                    if(bitmask[i]) {
+                        //num is available
+                        bitmask[i] = false;
+                        partialPer.push_back(nums[i]);
+                        backtrack(bitmask , nums , partialPer);
+                        partialPer.pop_back();
+                        bitmask[i] = true;
+                    }
+                }
+            }
+        }
+};
