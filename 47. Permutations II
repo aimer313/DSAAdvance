@@ -1,0 +1,34 @@
+// Chnna Sir.......one way of solution...
+class Solution {
+    vector<vector<int>> allPer;
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+         allPer.clear();//to clear all prev data
+        unordered_map<int,int> numsMap;
+        for(auto num:nums) numsMap[num]++;
+         vector<int> partialPer;
+         // vector<bool> bitmask(nums.size() , true);
+         backtrack(numsMap , partialPer , nums.size());
+         return allPer;
+    }
+    private:
+        void backtrack(unordered_map<int,int> numsMap ,vector<int> &partialPer , const int n) {
+            if(partialPer.size() == n) {
+                //assert (bitmask has no true values)
+                // one more base case can there map val == 0
+                allPer.push_back(partialPer);
+            } else {
+                for(auto& keyval : numsMap) {
+                    if(keyval.second > 0) {
+                        //num is available
+                        // bitmask[i] = false;
+                        keyval.second--;
+                        partialPer.push_back(keyval.first);
+                        backtrack(numsMap,partialPer,n);
+                        partialPer.pop_back();
+                        keyval.second++;
+                    }
+                }
+            }
+        }
+};
