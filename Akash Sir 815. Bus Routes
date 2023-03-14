@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int numBusesToDestination(vector<vector<int>>& routes, int source, int target) {
+        int n = routes.size();
+        map<int,vector<int>> stopBusMap;
+        
+        for(int i = 0 ; i<n ; i++) {
+            for(int j = 0 ; j<routes[i].size() ; j++) {
+                int stopNumber = routes[i][j];
+                stopBusMap[stopNumber].push_back(i);
+            }
+        }
+        
+        queue<int> q ; // for bfs
+        set<int> stopNumberSet; // viisted 
+        set<int> busNoSet;
+        
+        q.push(source);
+        stopNumberSet.insert(source);
+        
+        int ans = 0;
+        
+        while(!q.empty()) {
+            int size = q.size();
+            for(int i = 0 ; i<size ; i++) {
+                int currStop = q.front(); 
+                q.pop();
+                if(currStop == target) return ans;
+                vector<int> buses = stopBusMap[currStop];
+                for(int bus : buses) { // for each buses
+                    if(busNoSet.find(bus) == busNoSet.end()) {
+                    for(int stop : routes[bus]) { // for {
+                       if(stopNumberSet.find(stop) == stopNumberSet.end()) {
+                           q.push(stop);
+                           stopNumberSet.insert(stop);
+                       }
+                    }
+                    busNoSet.insert(bus);
+                    }
+                }
+            }
+            ans += 1;
+        }
+        return -1;
+    }
+};
