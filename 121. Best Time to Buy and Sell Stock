@@ -1,0 +1,83 @@
+// Bruth Force
+class Solution1 {
+public:
+    int maxProfit(vector<int>& prices) {
+        int mx = 0;
+        for(int i = 0 ; i<prices.size() ; i++) {
+            for(int j = i+1 ; j<prices.size() ; j++) {
+                if(prices[j] - prices[i] >= 0) {
+                    mx = max(mx , prices[j] - prices[i]);
+                }
+            }
+        }
+        return mx;
+    }
+};
+
+
+
+// Recurrence
+class Solution2 {
+public:
+    // f1->sell f2->buy
+    int f1(int n , const vector<int>& prices) {
+        if(n == 0) return 0;
+        if(n == 1) return 0;
+        
+        // return max(f1(n-1 , prices) , prices[n-1] - f2(n-1,prices));
+        return max(f1(n-1, prices), prices[n-1] - f2(n-1, prices));
+    }
+    
+    int f2(int n , const vector<int>& prices) {
+        if(n == 1) return prices[0];
+        
+        return min(f2(n-1,prices) , prices[n-1]);
+    }
+    int maxProfit(vector<int>& prices) {
+        return f1(prices.size() , prices);
+    }
+};
+
+
+// Memoization
+class Solution3 {
+public:
+    int maxProfit(vector<int>& prices) {
+        vector<int> dp1(prices.size() + 1 , -1);
+        vector<int> dp2(prices.size() + 1 , -1);
+        return f1(prices.size() , prices , dp1,dp2);
+    }
+private:
+    // f1->sell f2->buy
+    int f1(int n , const vector<int>& prices , vector<int>& dp1 , vector<int>& dp2) {
+        if(n == 0) return 0;
+        if(n == 1) return 0;
+        if(dp1[n] != -1) return dp1[n];
+        // return max(f1(n-1 , prices) , prices[n-1] - f2(n-1,prices));
+        return dp1[n] = max(f1(n-1, prices,dp1,dp2), prices[n-1] - f2(n-1, prices,dp2));
+    }
+    
+    int f2(int n , const vector<int>& prices ,vector<int>& dp2) {
+        if(n == 1) return prices[0];
+        if(dp2[n] != -1) return dp2[n];
+        return dp2[n] = min(f2(n-1,prices,dp2) , prices[n-1]);
+    }
+};
+
+// dp
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        vector<int> dp1(prices.size() + 1 , -1);
+        vector<int> dp2(prices.size() + 1 , -1);
+        dp1[0] = 0;
+        dp1[1] = 0;
+        dp2[1] = prices[0];
+        
+        for(int n = 2 ; n <= prices.size() ; n++) {
+            dp1[n] = max(dp1[n-1], prices[n-1] - dp2[n-1]);
+            dp2[n] = min(dp2[n-1] , prices[n-1]);
+        }
+        return dp1[prices.size()];
+    }
+};
