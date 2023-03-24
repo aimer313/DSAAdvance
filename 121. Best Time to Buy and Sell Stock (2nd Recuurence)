@@ -1,0 +1,69 @@
+// Recurrence 2 By Channa Sir
+// f1 -> buy f2 ->sell
+class Solution1 {
+public:
+    int maxProfit(vector<int>& prices) {
+        return f1(0 , prices);
+    }
+private:
+    int f1(int i , const vector<int>& prices) {
+        if(i == prices.size() - 1) return 0;
+        else return max(f1(i+1 , prices) , f2(i+1 , prices) - prices[i]);
+    }
+    
+    int f2(int i , const vector<int>& prices) {
+        if(i == prices.size() - 1) return prices.back();
+        else return max(prices[i] , f2(i+1 , prices));
+    }
+};
+
+// f1 -> buy f2 ->sell
+class Solution2 {
+public:
+    int maxProfit(vector<int>& prices) {
+        vector<int> f2tbl(prices.size(), INT_MIN);
+        return f1(0, prices, f2tbl);
+    }
+private:
+    int f1(int i, const vector<int>& prices, vector<int> &f2tbl) {
+        if(i == prices.size() - 1) return 0;
+        else return max(f1(i+1, prices, f2tbl), f2(i+1, prices, f2tbl) - prices[i]);
+    }
+    int f2(int i, const vector<int>& prices, vector<int> &f2tbl) {
+        if(f2tbl[i] == INT_MIN) {
+            if(i == prices.size() - 1) f2tbl[i] = prices.back();
+            else f2tbl[i] = max(prices[i], f2(i+1, prices, f2tbl));
+        }
+        return f2tbl[i];
+    }
+};
+
+class Solution3 {
+public:
+    int maxProfit(vector<int>& prices) {
+        vector<int> f2tbl(prices.size());
+        f2tbl.back() = prices.back();
+        int f1 = 0; // f1(n-1)
+        for(int i = prices.size() - 2; i >= 0; i--) {
+            f1 = max(f1, f2tbl[i+1] - prices[i]); // rvalue is f1(i+1), lvalue f1(i)
+            f2tbl[i] = max(prices[i], f2tbl[i+1]);
+        }
+        return f1; //f1(0)
+    }
+};
+    
+// O(n) time and O(1) extra space
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        vector<int> f2tbl(prices.size());
+        int f2 = prices.back(); //f2(n-1)
+        int f1 = 0; // f1(n-1)
+        for(int i = prices.size() - 2; i >= 0; i--) {
+            f1 = max(f1, f2 - prices[i]); // rvalue are f1(i+1) and f2(i+1), lvalue f1(i)
+            f2 = max(prices[i], f2); //rvalue are f2(i+1), lvalue f2(i)
+        }
+        return f1; //f1(0)
+    }
+};
+
